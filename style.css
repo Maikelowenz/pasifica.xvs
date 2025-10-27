@@ -1,98 +1,410 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* == PRELOADER "WOW" BARU == */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100vh;
-    margin: 0;
-}
-
-.chat-container {
-    width: 400px;
-    max-width: 90%;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: #022c43; /* Latar belakang lautan */
+    z-index: 99999;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+    visibility: visible;
+    opacity: 1;
+}
+
+.preloader.loaded {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader-text {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 2rem;
+    color: #00f2fe;
+    text-shadow: 0 0 10px #00f2fe;
+    margin-bottom: 1.5rem;
+}
+
+.loader-line {
+    width: 150px;
+    height: 3px;
+    background: rgba(0, 242, 254, 0.3);
+    border-radius: 3px;
     overflow: hidden;
 }
 
-.chat-header {
-    background-color: #007bff;
-    color: white;
-    padding: 16px;
+.loader-line::before {
+    content: '';
+    display: block;
+    width: 0%;
+    height: 100%;
+    background: #00f2fe;
+    box-shadow: 0 0 10px #00f2fe;
+    animation: load-line 2s infinite linear;
+}
+
+@keyframes load-line {
+    0% { width: 0%; }
+    50% { width: 100%; }
+    100% { width: 0%; }
+}
+
+/* == PENGATURAN DASAR & DESAIN "WOW" == */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #022c43, #055073, #19a0d1);
+    background-attachment: fixed;
+    color: #e0e0e0;
+    line-height: 1.7;
+    overflow-x: hidden;
+    cursor: none;
+}
+
+/* == KURSOR KUSTOM (WOW FACTOR) == */
+.custom-cursor-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #00f2fe;
+    border-radius: 50%;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+.custom-cursor-outline {
+    width: 30px;
+    height: 30px;
+    border: 2px solid #00f2fe;
+    border-radius: 50%;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.1s ease-out;
+}
+
+body:has(a:hover, .link-button:hover, .gallery-item:hover) .custom-cursor-dot {
+    width: 12px;
+    height: 12px;
+}
+body:has(a:hover, .link-button:hover, .gallery-item:hover) .custom-cursor-outline {
+    width: 40px;
+    height: 40px;
+    opacity: 0.5;
+}
+
+/* == HEADER & NAVIGASI (EFEK KACA) == */
+.header {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    padding: 1.2rem 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: padding 0.3s ease, background 0.3s ease; /* Transisi untuk mengecil */
+}
+
+/* (BARU) Style header saat di-scroll */
+.header.scrolled {
+    padding: 0.8rem 8%;
+    background: rgba(2, 44, 67, 0.5); /* Sedikit lebih solid */
+    backdrop-filter: blur(20px);
+}
+
+.logo {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #fff;
+    text-decoration: none;
+    text-shadow: 0 0 10px #00f2fe;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 2.5rem;
+}
+
+.nav-links a {
+    color: #e0e0e0;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #00f2fe;
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #fff;
+    text-shadow: 0 0 8px #00f2fe;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* == KONTEN UTAMA == */
+.section {
+    min-height: 100vh;
+    padding: 8rem 8% 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.section-title {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 3rem;
+    text-shadow: 0 0 15px rgba(0, 242, 254, 0.5);
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    width: 100px;
+    height: 4px;
+    background: #00f2fe;
+    border-radius: 2px;
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* == BAGIAN 1: HOME == */
+#home {
+    justify-content: center;
     text-align: center;
 }
 
-.chat-header h2 {
-    margin: 0;
-    font-size: 1.2rem;
+#particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 2; /* Naikkan Z-index agar di depan monster */
 }
 
-.chat-box {
-    flex-grow: 1;
-    height: 400px;
-    overflow-y: auto;
-    padding: 16px;
+#home h1, #home p {
+    position: relative;
+    z-index: 3; /* Paling depan */
+}
+
+#home h1 {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 4.5rem;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 0 25px rgba(0, 242, 254, 0.7);
+    margin-bottom: 1rem;
+}
+
+#home p {
+    font-size: 1.5rem;
+    color: #ccc;
+    font-weight: 300;
+}
+
+/* (DIUBAH) CSS Monster Laut untuk Parallax */
+.sea-monster-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-image: url('https://images.unsplash.com/photo-1545087221-879b26090c8f');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    mix-blend-mode: lighten;
+    z-index: 1; /* Di paling belakang (di bawah gelembung) */
+    /* Hapus 'animation' agar bisa dikontrol JS */
+}
+
+/* == BAGIAN 2: GALERI (KARTU KACA 3D) == */
+.gallery-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    width: 100%;
+}
+
+.gallery-item {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d; /* (BARU) Wajib untuk 3D Tilt */
+}
+
+.gallery-item:hover {
+    /* Hapus transform lama, biarkan tilt.js bekerja */
+    box-shadow: 0 0 40px rgba(0, 242, 254, 0.3);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gallery-item p {
+    padding: 1.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-align: left;
+    transform: translateZ(20px); /* (BARU) Memberi kedalaman pada teks */
+}
+
+/* == BAGIAN 3: STRUKTUR (KARTU KACA 3D) == */
+.structure-container {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    max-width: 1200px;
 }
 
-.message {
-    padding: 10px 14px;
-    border-radius: 18px;
-    max-width: 75%;
-    word-wrap: break-word;
+.structure-member {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    min-width: 250px;
+    transition: transform 0.3s ease;
+    transform-style: preserve-3d; /* (BARU) Wajib untuk 3D Tilt */
 }
 
-.message.user {
-    background-color: #007bff;
-    color: white;
-    align-self: flex-end;
-    border-bottom-right-radius: 4px;
+
+.structure-member h3 {
+    color: #00f2fe;
+    margin-bottom: 0.7rem;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 1.3rem;
+    transform: translateZ(30px); /* (BARU) Memberi kedalaman */
 }
 
-.message.bot {
-    background-color: #e9e9eb;
-    color: #333;
-    align-self: flex-start;
-    border-bottom-left-radius: 4px;
-}
-
-.chat-input-form {
-    display: flex;
-    border-top: 1px solid #ddd;
-    padding: 16px;
-}
-
-#user-input {
-    flex-grow: 1;
-    border: 1px solid #ccc;
-    border-radius: 18px;
-    padding: 10px 14px;
+.structure-member p {
     font-size: 1rem;
-    margin-right: 10px;
+    font-weight: 300;
+    transform: translateZ(20px); /* (BARU) Memberi kedalaman */
 }
 
-#user-input:focus {
-    outline: none;
-    border-color: #007bff;
+/* == BAGIAN 4: TAUTAN (TOMBOL GRADIENT) == */
+.links-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 1rem;
 }
 
-button {
-    background-color: #007bff;
-    color: white;
+.link-button {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #fff;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    background-size: 200% 100%;
     border: none;
-    border-radius: 18px;
-    padding: 10px 16px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
+    box-shadow: 0 5px 20px rgba(0, 198, 255, 0.3);
+    transition: all 0.4s ease;
 }
 
-button:hover {
-    background-color: #0056b3;
+.link-button:hover {
+    background-position: 100% 0;
+    transform: scale(1.05);
+    box-shadow: 0 8px 30px rgba(0, 198, 255, 0.5);
+}
+
+/* == FOOTER == */
+footer {
+    text-align: center;
+    padding: 3rem;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-weight: 300;
+}
+footer p {
+    color: #aaa;
+}
+
+/* == EFEK ANIMASI SAAT SCROLL (WOW FAKTOR) == */
+.animate-on-scroll {
+    opacity: 0;
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.animate-up { transform: translateY(50px); }
+.animate-left { transform: translateX(-50px); }
+.animate-right { transform: translateX(50px); }
+.is-visible {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+
+/* == RESPONSIVE UNTUK HP == */
+@media (max-width: 768px) {
+    body { cursor: auto; }
+    .custom-cursor-dot, .custom-cursor-outline { display: none; }
+    .header { padding: 1rem 5%; flex-direction: column; }
+    .nav-links { margin-top: 1rem; gap: 1.5rem; }
+    .section { padding: 8rem 5% 4rem; }
+    #home h1 { font-size: 3rem; }
+    #home p { font-size: 1.2rem; }
+    .section-title { font-size: 2.2rem; }
 }
