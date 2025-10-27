@@ -1,89 +1,108 @@
-// Langkah 1: Impor GoogleGenerativeAI dari CDN
-import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
-
-// -------------------------------------------------------------------
-// MASUKKAN API KEY ANDA DI SINI (HANYA UNTUK UJI COBA LOKAL!)
-// -------------------------------------------------------------------
-const API_KEY = 'AIzaSyD4TSZPmGxZzh1H9Kow7RjfAtkZMo0fJeM';
-// -------------------------------------------------------------------
-
-// Dapatkan elemen DOM
-const chatForm = document.getElementById('chat-form');
-const userInput = document.getElementById('user-input');
-const chatBox = document.getElementById('chat-box');
-
-// Inisialisasi Model Gemini
-const genAI = new GoogleGenerativeAI(API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-// Mulai sesi chat baru dengan history awal
-const chat = model.startChat({
-    history: [
-        {
-            role: "user",
-            parts: [{ text: "Halo" }],
-        },
-        {
-            role: "model",
-            parts: [{ text: "Halo! Saya adalah AI yang didukung oleh Gemini. Tanyakan apa saja!" }],
-        },
-    ],
+// == SCRIPT UNTUK PRELOADER "WOW" BARU ==
+window.addEventListener('load', () => {
+    const preloader = document.querySelector('.preloader');
+    // Tambahkan delay sedikit agar tidak terlalu cepat hilang
+    setTimeout(() => {
+        preloader.classList.add('loaded');
+    }, 500); // 500ms = 0.5 detik delay
 });
 
-// Tambahkan event listener ke formulir (jadikan async)
-chatForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const userMessage = userInput.value.trim();
 
-    if (userMessage) {
-        // Tampilkan pesan pengguna
-        appendMessage('user', userMessage);
-        userInput.value = '';
-
-        // Tampilkan indikator "mengetik..." dari bot
-        appendMessage('bot', 'Mengetik...');
-
-        try {
-            // Kirim pesan ke API Gemini
-            const result = await chat.sendMessage(userMessage);
-            const response = result.response;
-            const botResponse = response.text();
-            
-            // Update pesan "mengetik..." dengan respons AI
-            updateLastBotMessage(botResponse);
-
-        } catch (error) {
-            console.error('Error:', error);
-            updateLastBotMessage('Maaf, terjadi kesalahan. (Lihat konsol untuk detail)');
+// == SCRIPT UNTUK ANIMASI GELEMBUNG (PARTIKEL) ==
+// (Ini masih sama, tidak berubah)
+particlesJS("particles-js", {
+    "particles": {
+        "number": {"value": 25, "density": {"enable": true, "value_area": 800}},
+        "color": {"value": "#00f2fe"},
+        "shape": {"type": "circle"},
+        "opacity": {"value": 0.3, "random": true},
+        "size": {"value": 4, "random": true},
+        "line_linked": {"enable": false},
+        "move": {
+            "enable": true, "speed": 1.5, "direction": "top", "random": false,
+            "straight": false, "out_mode": "out", "bounce": false
         }
+    },
+    "interactivity": {
+        "detect_on": "canvas",
+        "events": {"onhover": {"enable": true, "mode": "bubble"}, "onclick": {"enable": true, "mode": "push"}, "resize": true},
+        "modes": {
+            "bubble": {"distance": 200, "size": 8, "duration": 2, "opacity": 0.8},
+            "push": {"particles_nb": 4}
+        }
+    },
+    "retina_detect": true
+});
+
+
+// == SCRIPT UNTUK 3D TILT "WOW" BARU ==
+VanillaTilt.init(document.querySelectorAll(".gallery-item, .structure-member"), {
+    max: 15,       // Maksimal kemiringan
+    speed: 400,    // Kecepatan transisi
+    glare: true,   // Efek silau/pantulan
+    "max-glare": 0.3 // Intensitas silau
+});
+
+
+// == SCRIPT UNTUK EFEK SCROLL BARU (HEADER & PARALLAX) ==
+const header = document.querySelector('.header');
+const seaMonster = document.querySelector('.sea-monster-bg');
+
+window.addEventListener('scroll', () => {
+    // 1. Efek Header Mengecil
+    if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
+
+    // 2. Efek Parallax Monster Laut
+    if (seaMonster) {
+        const scrollValue = window.scrollY;
+        // Gerakkan monster lebih lambat dari scroll (scrollY * 0.3)
+        // Ini akan membuatnya terlihat 'jauh' di latar belakang
+        seaMonster.style.transform = `translateY(${scrollValue * 0.3}px)`;
     }
 });
 
-/**
- * Menambahkan pesan baru ke chat box
- * @param {string} sender - 'user' atau 'bot'
- * @param {string} message - Teks pesan
- */
-function appendMessage(sender, message) {
-    const messageElement = document.createElement('div');
-    messageElement.classList.add('message', sender);
-    messageElement.textContent = message;
-    chatBox.appendChild(messageElement);
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
 
-/**
- * Memperbarui pesan terakhir bot (mengganti "Mengetik...")
- * @param {string} newMessage - Teks pesan baru
- */
-function updateLastBotMessage(newMessage) {
-    const allBotMessages = chatBox.querySelectorAll('.message.bot');
-    const lastBotMessage = allBotMessages[allBotMessages.length - 1];
-    
-    if (lastBotMessage && lastBotMessage.textContent === 'Mengetik...') {
-        lastBotMessage.textContent = newMessage;
-    } else {
-        // Jika tidak ada pesan "mengetik..." (misalnya error), tambahkan saja
-        appendMessage('bot', newMessage);
-    }
-}
+// == SCRIPT UNTUK ANIMASI SCROLL (Intersection Observer) ==
+// (Ini masih sama, tidak berubah)
+const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+};
+
+const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+        }
+    });
+}, observerOptions);
+
+const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
+elementsToAnimate.forEach(el => {
+    observer.observe(el);
+});
+
+
+// == SCRIPT UNTUK KURSOR KUSTOM ==
+// (Ini masih sama, tidak berubah)
+const cursorDot = document.querySelector('.custom-cursor-dot');
+const cursorOutline = document.querySelector('.custom-cursor-outline');
+
+window.addEventListener('mousemove', (e) => {
+    const posX = e.clientX;
+    const posY = e.clientY;
+
+    cursorDot.style.left = `${posX}px`;
+    cursorDot.style.top = `${posY}px`;
+
+    cursorOutline.animate({
+        left: `${posX}px`,
+        top: `${posY}px`
+    }, { duration: 500, fill: "forwards" });
+});
